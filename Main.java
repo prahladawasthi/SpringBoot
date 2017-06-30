@@ -6,34 +6,42 @@ import java.util.List;
 import com.model.Dish;
 
 public class Main {
-	static ArrayList<ArrayList> finalList = new ArrayList<>();
+	ArrayList<ArrayList> finalList = new ArrayList<>();
 
 	// Print all subsets of given set[]
-	 static ArrayList<ArrayList> printSubsets(List<Dish> dishList) {
+	ArrayList<ArrayList> printSubsets(List<Dish> dishList, int minutes) {
 		List<Dish> setList = null;
 
 		int sum = 0;
 		int n = dishList.size();
 		for (int i = 0; i < (1 << n); i++) {
-			System.out.print("{ ");
+			// System.out.print("{ ");
 			setList = new ArrayList<Dish>();
 			// Print current subset
 			for (int j = 0; j < n; j++) {
 
 				if ((i & (1 << j)) > 0) {
-					setList.add(dishList.get(j));	
-					System.out.print(dishList.get(j).getDishID() + " ");
-				}
-			}finalList.add((ArrayList) setList);
+					setList.add(dishList.get(j));
+					sum += dishList.get(j).getEatingTime();
 
-			System.out.println("}");
+					// System.out.print(dishList.get(j).getDishID() + " ");
+				}
+
+			}
+			System.out.println("total Time : " + sum);
+			if (sum <= minutes)
+				finalList.add((ArrayList) setList);
+			sum = 0;
+			// System.out.println("}");
 		}
-		
 		return finalList;
 	}
 
 	// Driver code
 	public static void main(String[] args) {
+
+		int sum = 0;
+
 		List<Dish> dishList = new ArrayList<Dish>();
 		Dish dish1 = new Dish();
 		dish1.setDishID(2);
@@ -53,13 +61,19 @@ public class Main {
 		dish3.setSatisfaction(9);
 		dishList.add(dish3);
 
-		List<ArrayList> str = printSubsets(dishList);
+		Main main = new Main();
 
-		for (List<Dish> dishlist : str) {
-			for (Dish dish : dishList) {
-				System.out.print( dish.getDishID()+" ,");
+		List<ArrayList> str = main.printSubsets(dishList, 5);
+
+		for (List<Dish> list : str) {
+			for (Dish dish : list) {
+				sum += dish.getEatingTime();
+				System.out.print(dish.getEatingTime() + " ");
 			}
-			System.out.println();
+
+			System.out.println("total Time : " + sum);
+			sum = 0;
 		}
+
 	}
 }
